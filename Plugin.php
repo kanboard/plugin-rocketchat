@@ -28,7 +28,7 @@ class Plugin extends Base
 
     public function getPluginDescription()
     {
-        return 'Receive notifications on RocketChat';
+        return t('Receive notifications on RocketChat');
     }
 
     public function getPluginAuthor()

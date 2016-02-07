@@ -5,6 +5,8 @@ RocketChat plugin for Kanboard
 
 Receive Kanboard notifications on [RocketChat](https://rocket.chat/).
 
+![RocketChat](https://cloud.githubusercontent.com/assets/323546/12873674/abde70a0-cd91-11e5-81cb-bba95fc48a73.png)
+
 You can configure RocketChat notifications for a project or for each individual Kanboard user.
 
 Author

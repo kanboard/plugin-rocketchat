@@ -20,10 +20,11 @@ class Plugin extends Base
 
         $this->userNotificationType->setType('rocketchat', 'RocketChat', '\Kanboard\Plugin\RocketChat\Notification\RocketChat');
         $this->projectNotificationType->setType('rocketchat', 'RocketChat', '\Kanboard\Plugin\RocketChat\Notification\RocketChat');
+    }
 
-        $this->on('app.bootstrap', function ($container) {
-            Translator::load($container['config']->getCurrentLanguage(), __DIR__.'/Locale');
-        });
+    public function onStartup()
+    {
+        Translator::load($this->language->getCurrentLanguage(), __DIR__.'/Locale');
     }
 
     public function getPluginDescription()
@@ -38,7 +39,7 @@ class Plugin extends Base
 
     public function getPluginVersion()
     {
-        return '1.0.0';
+        return '1.0.1';
     }
 
     public function getPluginHomepage()

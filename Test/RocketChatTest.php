@@ -3,17 +3,17 @@
 require_once 'tests/units/Base.php';
 
 use Kanboard\Plugin\RocketChat\Notification\RocketChat;
-use Kanboard\Model\Project;
-use Kanboard\Model\Task;
-use Kanboard\Model\User;
-use Kanboard\Model\TaskCreation;
-use Kanboard\Model\TaskFinder;
+use Kanboard\Model\ProjectModel;
+use Kanboard\Model\TaskModel;
+use Kanboard\Model\UserModel;
+use Kanboard\Model\TaskCreationModel;
+use Kanboard\Model\TaskFinderModel;
 
 class RocketChatTest extends Base
 {
     public function testNotifyUser()
     {
-        $this->container['userMetadata']
+        $this->container['userMetadataModel']
             ->save(1, array('rocketchat_webhook_url' => 'my url'));
 
         $this->container['httpClient']
@@ -21,10 +21,10 @@ class RocketChatTest extends Base
             ->method('postForm')
             ->with('my url', $this->anything());
 
-        $userModel = new User($this->container);
-        $projectModel = new Project($this->container);
-        $taskCreationModel = new TaskCreation($this->container);
-        $taskFinderModel = new TaskFinder($this->container);
+        $userModel = new UserModel($this->container);
+        $projectModel = new ProjectModel($this->container);
+        $taskCreationModel = new TaskCreationModel($this->container);
+        $taskFinderModel = new TaskFinderModel($this->container);
         $handler = new RocketChat($this->container);
 
         $this->assertEquals(1, $projectModel->create(array('name' => 'test')));
@@ -35,22 +35,22 @@ class RocketChatTest extends Base
         $event = array('task' => $task);
         $event['task']['task_id'] = $task['id'];
 
-        $handler->notifyUser($user, Task::EVENT_MOVE_COLUMN, $event);
+        $handler->notifyUser($user, TaskModel::EVENT_MOVE_COLUMN, $event);
     }
 
     public function testNotifyUserWithWebhookNotConfigured()
     {
-        $this->container['userMetadata']
+        $this->container['userMetadataModel']
             ->save(1, array('rocketchat_webhook_url' => ''));
 
         $this->container['httpClient']
             ->expects($this->never())
             ->method('postForm');
 
-        $userModel = new User($this->container);
-        $projectModel = new Project($this->container);
-        $taskCreationModel = new TaskCreation($this->container);
-        $taskFinderModel = new TaskFinder($this->container);
+        $userModel = new UserModel($this->container);
+        $projectModel = new ProjectModel($this->container);
+        $taskCreationModel = new TaskCreationModel($this->container);
+        $taskFinderModel = new TaskFinderModel($this->container);
         $handler = new RocketChat($this->container);
 
         $this->assertEquals(1, $projectModel->create(array('name' => 'test')));
@@ -61,7 +61,7 @@ class RocketChatTest extends Base
         $event = array('task' => $task);
         $event['task']['task_id'] = $task['id'];
 
-        $handler->notifyUser($user, Task::EVENT_MOVE_COLUMN, $event);
+        $handler->notifyUser($user, TaskModel::EVENT_MOVE_COLUMN, $event);
     }
 
     public function testNotifyProject()
@@ -71,16 +71,15 @@ class RocketChatTest extends Base
             ->method('postForm')
             ->with('my url', $this->anything());
 
-        $userModel = new User($this->container);
-        $projectModel = new Project($this->container);
-        $taskCreationModel = new TaskCreation($this->container);
-        $taskFinderModel = new TaskFinder($this->container);
+        $projectModel = new ProjectModel($this->container);
+        $taskCreationModel = new TaskCreationModel($this->container);
+        $taskFinderModel = new TaskFinderModel($this->container);
         $handler = new RocketChat($this->container);
 
         $this->assertEquals(1, $projectModel->create(array('name' => 'test')));
         $this->assertEquals(1, $taskCreationModel->create(array('project_id' => 1, 'title' => 'test')));
 
-        $this->container['projectMetadata']
+        $this->container['projectMetadataModel']
             ->save(1, array('rocketchat_webhook_url' => 'my url'));
 
         $project = $projectModel->getById(1);
@@ -88,7 +87,7 @@ class RocketChatTest extends Base
         $event = array('task' => $task);
         $event['task']['task_id'] = $task['id'];
 
-        $handler->notifyProject($project, Task::EVENT_MOVE_COLUMN, $event);
+        $handler->notifyProject($project, TaskModel::EVENT_MOVE_COLUMN, $event);
     }
 
     public function testNotifyProjectWithWebhookNotConfigured()
@@ -97,16 +96,15 @@ class RocketChatTest extends Base
             ->expects($this->never())
             ->method('postForm');
 
-        $userModel = new User($this->container);
-        $projectModel = new Project($this->container);
-        $taskCreationModel = new TaskCreation($this->container);
-        $taskFinderModel = new TaskFinder($this->container);
+        $projectModel = new ProjectModel($this->container);
+        $taskCreationModel = new TaskCreationModel($this->container);
+        $taskFinderModel = new TaskFinderModel($this->container);
         $handler = new RocketChat($this->container);
 
         $this->assertEquals(1, $projectModel->create(array('name' => 'test')));
         $this->assertEquals(1, $taskCreationModel->create(array('project_id' => 1, 'title' => 'test')));
 
-        $this->container['projectMetadata']
+        $this->container['projectMetadataModel']
             ->save(1, array('rocketchat_webhook_url' => ''));
 
         $project = $projectModel->getById(1);
@@ -114,6 +112,6 @@ class RocketChatTest extends Base
         $event = array('task' => $task);
         $event['task']['task_id'] = $task['id'];
 
-        $handler->notifyProject($project, Task::EVENT_MOVE_COLUMN, $event);
+        $handler->notifyProject($project, TaskModel::EVENT_MOVE_COLUMN, $event);
     }
 }

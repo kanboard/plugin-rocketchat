@@ -3,7 +3,7 @@
 namespace Kanboard\Plugin\RocketChat\Notification;
 
 use Kanboard\Core\Base;
-use Kanboard\Notification\NotificationInterface;
+use Kanboard\Core\Notification\NotificationInterface;
 
 /**
  * RocketChat Notification
@@ -23,10 +23,10 @@ class RocketChat extends Base implements NotificationInterface
      */
     public function notifyUser(array $user, $event_name, array $event_data)
     {
-        $webhook = $this->userMetadata->get($user['id'], 'rocketchat_webhook_url');
+        $webhook = $this->userMetadataModel->get($user['id'], 'rocketchat_webhook_url');
 
         if (! empty($webhook)) {
-            $project = $this->project->getById($event_data['task']['project_id']);
+            $project = $this->projectModel->getById($event_data['task']['project_id']);
             $this->sendMessage($webhook, $project, $event_name, $event_data);
         }
     }
@@ -41,7 +41,7 @@ class RocketChat extends Base implements NotificationInterface
      */
     public function notifyProject(array $project, $event_name, array $event_data)
     {
-        $webhook = $this->projectMetadata->get($project['id'], 'rocketchat_webhook_url');
+        $webhook = $this->projectMetadataModel->get($project['id'], 'rocketchat_webhook_url');
 
         if (! empty($webhook)) {
             $this->sendMessage($webhook, $project, $event_name, $event_data);
@@ -55,23 +55,24 @@ class RocketChat extends Base implements NotificationInterface
      * @param  array     $project
      * @param  string    $event_name
      * @param  array     $event_data
+     * @return string
      */
     public function getMessage(array $project, $event_name, array $event_data)
     {
         if ($this->userSession->isLogged()) {
             $author = $this->helper->user->getFullname();
-            $title = $this->notification->getTitleWithAuthor($author, $event_name, $event_data);
+            $title = $this->notificationModel->getTitleWithAuthor($author, $event_name, $event_data);
         } else {
-            $title = $this->notification->getTitleWithoutAuthor($event_name, $event_data);
+            $title = $this->notificationModel->getTitleWithoutAuthor($event_name, $event_data);
         }
 
         $message = '*['.$project['name'].']* ';
         $message .= $title;
         $message .= ' ('.$event_data['task']['title'].')';
 
-        if ($this->config->get('application_url') !== '') {
+        if ($this->configModel->get('application_url') !== '') {
             $message .= ' - <';
-            $message .= $this->helper->url->to('task', 'show', array('task_id' => $event_data['task']['id'], 'project_id' => $project['id']), '', true);
+            $message .= $this->helper->url->to('TaskViewController', 'show', array('task_id' => $event_data['task']['id'], 'project_id' => $project['id']), '', true);
             $message .= '|'.t('view the task on Kanboard').'>';
         }
 
@@ -86,7 +87,7 @@ class RocketChat extends Base implements NotificationInterface
      * Send message to RocketChat
      *
      * @access private
-     * @param  srting    $webhook
+     * @param  string    $webhook
      * @param  array     $project
      * @param  string    $event_name
      * @param  array     $event_data

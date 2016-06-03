@@ -18,13 +18,13 @@ class Plugin extends Base
         $this->template->hook->attach('template:project:integrations', 'RocketChat:project/integration');
         $this->template->hook->attach('template:user:integrations', 'RocketChat:user/integration');
 
-        $this->userNotificationType->setType('rocketchat', 'RocketChat', '\Kanboard\Plugin\RocketChat\Notification\RocketChat');
-        $this->projectNotificationType->setType('rocketchat', 'RocketChat', '\Kanboard\Plugin\RocketChat\Notification\RocketChat');
+        $this->userNotificationTypeModel->setType('rocketchat', 'RocketChat', '\Kanboard\Plugin\RocketChat\Notification\RocketChat');
+        $this->projectNotificationTypeModel->setType('rocketchat', 'RocketChat', '\Kanboard\Plugin\RocketChat\Notification\RocketChat');
     }
 
     public function onStartup()
     {
-        Translator::load($this->language->getCurrentLanguage(), __DIR__.'/Locale');
+        Translator::load($this->languageModel->getCurrentLanguage(), __DIR__.'/Locale');
     }
 
     public function getPluginDescription()
@@ -39,7 +39,7 @@ class Plugin extends Base
 
     public function getPluginVersion()
     {
-        return '1.0.1';
+        return '1.0.2';
     }
 
     public function getPluginHomepage()

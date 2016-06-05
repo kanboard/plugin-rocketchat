@@ -95,6 +95,6 @@ class RocketChat extends Base implements NotificationInterface
     private function sendMessage($webhook, array $project, $event_name, array $event_data)
     {
         $payload = $this->getMessage($project, $event_name, $event_data);
-        $this->httpClient->postForm($webhook, $payload);
+        $this->httpClient->postFormAsync($webhook, $payload);
     }
 }

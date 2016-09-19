@@ -24,10 +24,11 @@ class RocketChat extends Base implements NotificationInterface
     public function notifyUser(array $user, $event_name, array $event_data)
     {
         $webhook = $this->userMetadataModel->get($user['id'], 'rocketchat_webhook_url');
+        $channel = $this->userMetadataModel->get($user['id'], 'slack_webhook_channel');
 
         if (! empty($webhook)) {
             $project = $this->projectModel->getById($event_data['task']['project_id']);
-            $this->sendMessage($webhook, $project, $event_name, $event_data);
+            $this->sendMessage($webhook, $channel, $project, $event_name, $event_data);
         }
     }
 

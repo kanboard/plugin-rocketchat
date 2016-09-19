@@ -8,7 +8,7 @@ use Kanboard\Core\Plugin\Base;
 /**
  * RocketChat Plugin
  *
- * @package  slack
+ * @package  rocketchat
  * @author   Frederic Guillot
  */
 class Plugin extends Base

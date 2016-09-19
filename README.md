@@ -39,9 +39,21 @@ Configuration
 
 - Generate a new webhook url
 - Go to **Administration > Integrations > New Integration > Incoming Webhook**
+- You can override the channel later if required
 
 ### Kanboard configuration
 
-1. Copy and paste the webhook url in **Integrations > RocketChat** (user profile or project settings)
+#### Individual notifications
+
+1. Copy and paste the webhook url into **Integrations > RocketChat** in your
+   user profile 
 2. Enable RocketChat notifications in your user profile or project settings
 3. Enjoy!
+
+#### Project notification
+
+1. Copy and paste the webhook url into **Integrations > RocketChat** in the
+   project settings
+2. Add the channel name (Optional)
+3. Enable RocketChat notification in the project
+4. Enjoy!

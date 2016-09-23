@@ -24,10 +24,11 @@ class RocketChat extends Base implements NotificationInterface
     public function notifyUser(array $user, $event_name, array $event_data)
     {
         $webhook = $this->userMetadataModel->get($user['id'], 'rocketchat_webhook_url');
+        $channel = $this->userMetadataModel->get($user['id'], 'rocketchat_webhook_channel');
 
         if (! empty($webhook)) {
             $project = $this->projectModel->getById($event_data['task']['project_id']);
-            $this->sendMessage($webhook, $project, $event_name, $event_data);
+            $this->sendMessage($webhook, $channel, $project, $event_name, $event_data);
         }
     }
 
@@ -42,9 +43,10 @@ class RocketChat extends Base implements NotificationInterface
     public function notifyProject(array $project, $event_name, array $event_data)
     {
         $webhook = $this->projectMetadataModel->get($project['id'], 'rocketchat_webhook_url');
+        $channel = $this->projectMetadataModel->get($project['id'], 'rocketchat_webhook_channel');
 
         if (! empty($webhook)) {
-            $this->sendMessage($webhook, $project, $event_name, $event_data);
+            $this->sendMessage($webhook, $channel, $project, $event_name, $event_data);
         }
     }
 
@@ -88,13 +90,19 @@ class RocketChat extends Base implements NotificationInterface
      *
      * @access private
      * @param  string    $webhook
+     * @param  string    $channel
      * @param  array     $project
      * @param  string    $event_name
      * @param  array     $event_data
      */
-    private function sendMessage($webhook, array $project, $event_name, array $event_data)
+    private function sendMessage($webhook, $channel, array $project, $event_name, array $event_data)
     {
         $payload = $this->getMessage($project, $event_name, $event_data);
+
+        if (! empty($channel)) {
+          $payload['channel'] = $channel;
+        }
+
         $this->httpClient->postFormAsync($webhook, $payload);
     }
 }

@@ -1,5 +1,5 @@
 <h3><img src="<?= $this->url->dir() ?>plugins/RocketChat/rocketchat-icon.png"/>&nbsp;RocketChat</h3>
-<div class="listing">
+<div class="panel">
     <?= $this->form->label(t('Webhook URL'), 'rocketchat_webhook_url') ?>
     <?= $this->form->text('rocketchat_webhook_url', $values) ?>
 

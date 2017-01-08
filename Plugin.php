@@ -39,11 +39,16 @@ class Plugin extends Base
 
     public function getPluginVersion()
     {
-        return '1.0.4';
+        return '1.0.5';
     }
 
     public function getPluginHomepage()
     {
         return 'https://github.com/kanboard/plugin-rocketchat';
+    }
+
+    public function getCompatibleVersion()
+    {
+        return '>=1.0.37';
     }
 }

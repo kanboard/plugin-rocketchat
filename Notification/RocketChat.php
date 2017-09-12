@@ -79,18 +79,21 @@ class RocketChat extends Base implements NotificationInterface
 
         $message = '*['.$project['name'].']* ';
         $message .= $title;
-        $message .= ' ('.$eventData['task']['title'].')';
 
         if ($this->configModel->get('application_url') !== '') {
-            $message .= ' - <';
-            $message .= $this->helper->url->to('TaskViewController', 'show', array('task_id' => $eventData['task']['id'], 'project_id' => $project['id']), '', true);
-            $message .= '|'.t('view the task on Kanboard').'>';
+            $url = $this->helper->url->to('TaskViewController', 'show', array('task_id' => $eventData['task']['id'], 'project_id' => $project['id']), '', true);
+            $message = preg_replace('/#(\d+)( |$)/', '<'.$url.'|#$1 "'.$eventData['task']['title'].'">$2', $message);
+        }
+        else {
+            $message = preg_replace('/#(\d+)( |$)/', '#$1 "'.$eventData['task']['title'].'"$2', $message);
         }
 
         return array(
-            'text' => $message,
             'username' => 'Kanboard',
             'icon_url' => 'https://kanboard.net/assets/img/favicon.png',
+            'attachments' => array(
+                    array('text' => $message, 'color' => $eventData['task']['color_id'])
+            )
         );
     }
 

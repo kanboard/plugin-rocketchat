@@ -89,8 +89,8 @@ class RocketChat extends Base implements NotificationInterface
 
         return array(
             'text' => $message,
-            'username' => 'Kanboard',
-            'icon_url' => 'https://kanboard.net/assets/img/favicon.png',
+#            'username' => $author,
+#           'icon_url' => 'https://kanboard.net/assets/img/favicon.png',
         );
     }
 
@@ -107,11 +107,12 @@ class RocketChat extends Base implements NotificationInterface
     private function sendMessage($webhook, $channel, array $project, $eventName, array $eventData)
     {
         $payload = $this->getMessage($project, $eventName, $eventData);
-
+        
         if (! empty($channel)) {
           $payload['channel'] = $channel;
         }
+        
+        $this->httpClient->postJsonAsync($webhook, $payload);
 
-        $this->httpClient->postFormAsync($webhook, $payload);
     }
 }

@@ -89,8 +89,6 @@ class RocketChat extends Base implements NotificationInterface
 
         return array(
             'text' => $message,
-#            'username' => $author,
-#           'icon_url' => 'https://kanboard.net/assets/img/favicon.png',
         );
     }
 

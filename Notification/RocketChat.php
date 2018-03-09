@@ -105,7 +105,6 @@ class RocketChat extends Base implements NotificationInterface
     private function sendMessage($webhook, $channel, array $project, $eventName, array $eventData)
     {
         $payload = $this->getMessage($project, $eventName, $eventData);
-        
         if (! empty($channel)) {
           $payload['channel'] = $channel;
         }

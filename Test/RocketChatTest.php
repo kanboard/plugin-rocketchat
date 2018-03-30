@@ -18,7 +18,7 @@ class RocketChatTest extends Base
 
         $this->container['httpClient']
             ->expects($this->once())
-            ->method('postFormAsync')
+            ->method('postJsonAsync')
             ->with('my url', $this->anything());
 
         $userModel = new UserModel($this->container);
@@ -45,7 +45,7 @@ class RocketChatTest extends Base
 
         $this->container['httpClient']
             ->expects($this->never())
-            ->method('postFormAsync');
+            ->method('postJsonAsync');
 
         $userModel = new UserModel($this->container);
         $projectModel = new ProjectModel($this->container);
@@ -68,7 +68,7 @@ class RocketChatTest extends Base
     {
         $this->container['httpClient']
             ->expects($this->once())
-            ->method('postFormAsync')
+            ->method('postJsonAsync')
             ->with('my url', $this->anything());
 
         $projectModel = new ProjectModel($this->container);
@@ -94,7 +94,7 @@ class RocketChatTest extends Base
     {
         $this->container['httpClient']
             ->expects($this->never())
-            ->method('postFormAsync');
+            ->method('postJsonAsync');
 
         $projectModel = new ProjectModel($this->container);
         $taskCreationModel = new TaskCreationModel($this->container);

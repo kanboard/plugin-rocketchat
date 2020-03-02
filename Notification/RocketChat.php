@@ -24,7 +24,7 @@ class RocketChat extends Base implements NotificationInterface
      */
     public function notifyUser(array $user, $eventName, array $eventData)
     {
-        $webhook = $this->userMetadataModel->get($user['id'], 'rocketchat_webhook_url');
+        $webhook = $this->userMetadataModel->get($user['id'], 'rocketchat_webhook_url', $this->configModel->get('rocketchat_webhook_url'));
         $channel = $this->userMetadataModel->get($user['id'], 'rocketchat_webhook_channel');
 
         if (! empty($webhook)) {
@@ -82,13 +82,16 @@ class RocketChat extends Base implements NotificationInterface
         $message .= ' ('.$eventData['task']['title'].')';
 
         if ($this->configModel->get('application_url') !== '') {
-            $message .= ' - <';
-            $message .= $this->helper->url->to('TaskViewController', 'show', array('task_id' => $eventData['task']['id'], 'project_id' => $project['id']), '', true);
-            $message .= '|'.t('view the task on Kanboard').'>';
+         $message .= ' - ';
+         $message .= '['.t('view the task on Kanboard').']';
+         $message .= '(';
+         $message .= $this->helper->url->to('TaskViewController', 'show', array('task_id' => $eventData['task']['id'], 'project_id' => $project['id']), '', true);
+         $message .= ')';
         }
 
         return array(
             'text' => $message,
+            'username' => 'kanboard',
         );
     }
 
@@ -102,7 +105,7 @@ class RocketChat extends Base implements NotificationInterface
      * @param  string    $eventName
      * @param  array     $eventData
      */
-    private function sendMessage($webhook, $channel, array $project, $eventName, array $eventData)
+    protected function sendMessage($webhook, $channel, array $project, $eventName, array $eventData)
     {
         $payload = $this->getMessage($project, $eventName, $eventData);
         if (! empty($channel)) {

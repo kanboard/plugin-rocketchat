@@ -15,6 +15,7 @@ class Plugin extends Base
 {
     public function initialize()
     {
+        $this->template->hook->attach('template:config:integrations', 'RocketChat:config/integration');
         $this->template->hook->attach('template:project:integrations', 'RocketChat:project/integration');
         $this->template->hook->attach('template:user:integrations', 'RocketChat:user/integration');
 
@@ -39,7 +40,7 @@ class Plugin extends Base
 
     public function getPluginVersion()
     {
-        return '1.0.6';
+        return '1.0.7';
     }
 
     public function getPluginHomepage()

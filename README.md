@@ -1,8 +1,6 @@
 RocketChat plugin for Kanboard
 ==============================
 
-[![Build Status](https://travis-ci.org/kanboard/plugin-rocketchat.svg?branch=master)](https://travis-ci.org/kanboard/plugin-rocketchat)
-
 Receive Kanboard notifications on [RocketChat](https://rocket.chat/).
 
 ![RocketChat](https://cloud.githubusercontent.com/assets/323546/12873674/abde70a0-cd91-11e5-81cb-bba95fc48a73.png)
